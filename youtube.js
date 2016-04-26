@@ -32,7 +32,7 @@ function initialize() {
 
 
 $('#play').on('click', function () {
-
+    console.log("player is clicked");
     player.playVideo();
 
 });
