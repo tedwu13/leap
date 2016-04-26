@@ -16,19 +16,23 @@ function onYouTubeIframeAPIReady() {
 }
 
 function initialize() {
-    // Update the controls on load
-        updateTimerDisplay();
-        updateProgressBar();
+    // // Update the controls on load
+    //     updateProgressBar();
 
-        // Clear any old interval.
-        clearInterval(time_update_interval);
+    //     // Clear any old interval.
+    //     clearInterval(time_update_interval);
 
-        // Start interval to update elapsed time display and
-        // the elapsed part of the progress bar every second.
-        time_update_interval = setInterval(function () {
-            updateTimerDisplay();
-            updateProgressBar();
-        }, 1000)
+    //     // Start interval to update elapsed time display and
+    //     // the elapsed part of the progress bar every second.
+    //     time_update_interval = setInterval(function () {
+    //         updateProgressBar();
+    //     }, 1000)
 
-    
 }
+
+
+$('#play').on('click', function () {
+
+    player.playVideo();
+
+});
