@@ -5,7 +5,7 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player('video-placeholder', {
         width: 600,
         height: 400,
-        videoId: 'Xa0Q0J5tOP0',
+        videoId: 'pt2Wd_e-1nQ',
         playerVars: {
             color: 'white',
             playlist: 'taJ60kskkns,FG0fTKAqZ5g'
@@ -13,14 +13,27 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-// Playback
+// Play button 
 
 $('#play').click(function() {
-    console.log("play button clicked");
     player.playVideo();
 });
 
+// Pause button
 $('#pause').click(function() {
-    console.log("pause button clicked");
     player.pauseVideo();
 });
+
+$('#mute-toggle').on('click', function() {
+    
+    if(player.isMuted) {
+        player.unMute();
+    }
+    else {
+        player.mute();
+    }
+});
+
+$('#volume-input').on('change', function() {
+
+})
