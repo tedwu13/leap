@@ -1,6 +1,7 @@
 var player;
 
 function onYouTubeIframeAPIReady() {
+    console.log("iframe api ready");
     player = new YT.Player('video-placeholder', {
         width: 600,
         height: 400,
@@ -8,31 +9,18 @@ function onYouTubeIframeAPIReady() {
         playerVars: {
             color: 'white',
             playlist: 'taJ60kskkns,FG0fTKAqZ5g'
-        },
-        events: {
-            onReady: initialize
         }
     });
 }
 
-function initialize() {
-    // // Update the controls on load
-    //     updateProgressBar();
+// Playback
 
-    //     // Clear any old interval.
-    //     clearInterval(time_update_interval);
-
-    //     // Start interval to update elapsed time display and
-    //     // the elapsed part of the progress bar every second.
-    //     time_update_interval = setInterval(function () {
-    //         updateProgressBar();
-    //     }, 1000)
-
-}
-
-
-$('#play').on('click', function () {
-    console.log("player is clicked");
+$('#play').click(function() {
+    console.log("play button clicked");
     player.playVideo();
+});
 
+$('#pause').click(function() {
+    console.log("pause button clicked");
+    player.pauseVideo();
 });
