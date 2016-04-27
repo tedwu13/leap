@@ -2,7 +2,7 @@
 var previousFrame = null;
 var paused = false;
 var pauseOnGesture = false;
-
+var isPlayed = false;
 // Setup Leap loop with frame callback function
 var controllerOptions = {enableGestures: true};
 
@@ -58,6 +58,12 @@ Leap.loop(controllerOptions, function(frame) {
       handString += "Arm center: " + vectorToString(hand.arm.center()) + "<br />";
       handString += "Arm up vector: " + vectorToString(hand.arm.basis[1]) + "<br />";
 
+      if(hand.type == "left") {
+        player.pauseVideo();
+      }
+      else if (hand.type == "right") {
+        player.playVideo();
+      }
       // Hand motion factors
       if (previousFrame && previousFrame.valid) {
         var translation = hand.translation(previousFrame);
@@ -92,50 +98,50 @@ Leap.loop(controllerOptions, function(frame) {
   }
   handOutput.innerHTML = handString;
 
-  // Display Pointable (finger and tool) object data
-  var pointableOutput = document.getElementById("pointableData");
-  var pointableString = "";
-  if (frame.pointables.length > 0) {
-    var fingerTypeMap = ["Thumb", "Index finger", "Middle finger", "Ring finger", "Pinky finger"];
-    var boneTypeMap = ["Metacarpal", "Proximal phalanx", "Intermediate phalanx", "Distal phalanx"];
-    for (var i = 0; i < frame.pointables.length; i++) {
-      var pointable = frame.pointables[i];
+  // // Display Pointable (finger and tool) object data
+  // var pointableOutput = document.getElementById("pointableData");
+  // var pointableString = "";
+  // if (frame.pointables.length > 0) {
+  //   var fingerTypeMap = ["Thumb", "Index finger", "Middle finger", "Ring finger", "Pinky finger"];
+  //   var boneTypeMap = ["Metacarpal", "Proximal phalanx", "Intermediate phalanx", "Distal phalanx"];
+  //   for (var i = 0; i < frame.pointables.length; i++) {
+  //     var pointable = frame.pointables[i];
 
-      pointableString += "<div style='width:250px; float:left; padding:5px'>";
+  //     pointableString += "<div style='width:250px; float:left; padding:5px'>";
 
-      if (pointable.tool) {
-        pointableString += "Pointable ID: " + pointable.id + "<br />";
-        pointableString += "Classified as a tool <br />";
-        pointableString += "Length: " + pointable.length.toFixed(1) + " mm<br />";
-        pointableString += "Width: "  + pointable.width.toFixed(1) + " mm<br />";
-        pointableString += "Direction: " + vectorToString(pointable.direction, 2) + "<br />";
-        pointableString += "Tip position: " + vectorToString(pointable.tipPosition) + " mm<br />"
-        pointableString += "</div>";
-      }
-      else {
-        pointableString += "Pointable ID: " + pointable.id + "<br />";
-        pointableString += "Type: " + fingerTypeMap[pointable.type] + "<br />";
-        pointableString += "Belongs to hand with ID: " + pointable.handId + "<br />";
-        pointableString += "Classified as a finger<br />";
-        pointableString += "Length: " + pointable.length.toFixed(1) + " mm<br />";
-        pointableString += "Width: "  + pointable.width.toFixed(1) + " mm<br />";
-        pointableString += "Direction: " + vectorToString(pointable.direction, 2) + "<br />";
-        pointableString += "Extended?: "  + pointable.extended + "<br />";
-        pointable.bones.forEach( function(bone){
-          pointableString += boneTypeMap[bone.type] + " bone <br />";
-          pointableString += "Center: " + vectorToString(bone.center()) + "<br />";
-          pointableString += "Direction: " + vectorToString(bone.direction()) + "<br />";
-          pointableString += "Up vector: " + vectorToString(bone.basis[1]) + "<br />";
-        });
-        pointableString += "Tip position: " + vectorToString(pointable.tipPosition) + " mm<br />";
-        pointableString += "</div>";
-      }
-    }
-  }
-  else {
-    pointableString += "<div>No pointables</div>";
-  }
-  pointableOutput.innerHTML = pointableString;
+  //     if (pointable.tool) {
+  //       pointableString += "Pointable ID: " + pointable.id + "<br />";
+  //       pointableString += "Classified as a tool <br />";
+  //       pointableString += "Length: " + pointable.length.toFixed(1) + " mm<br />";
+  //       pointableString += "Width: "  + pointable.width.toFixed(1) + " mm<br />";
+  //       pointableString += "Direction: " + vectorToString(pointable.direction, 2) + "<br />";
+  //       pointableString += "Tip position: " + vectorToString(pointable.tipPosition) + " mm<br />"
+  //       pointableString += "</div>";
+  //     }
+  //     else {
+  //       pointableString += "Pointable ID: " + pointable.id + "<br />";
+  //       pointableString += "Type: " + fingerTypeMap[pointable.type] + "<br />";
+  //       pointableString += "Belongs to hand with ID: " + pointable.handId + "<br />";
+  //       pointableString += "Classified as a finger<br />";
+  //       pointableString += "Length: " + pointable.length.toFixed(1) + " mm<br />";
+  //       pointableString += "Width: "  + pointable.width.toFixed(1) + " mm<br />";
+  //       pointableString += "Direction: " + vectorToString(pointable.direction, 2) + "<br />";
+  //       pointableString += "Extended?: "  + pointable.extended + "<br />";
+  //       pointable.bones.forEach( function(bone){
+  //         pointableString += boneTypeMap[bone.type] + " bone <br />";
+  //         pointableString += "Center: " + vectorToString(bone.center()) + "<br />";
+  //         pointableString += "Direction: " + vectorToString(bone.direction()) + "<br />";
+  //         pointableString += "Up vector: " + vectorToString(bone.basis[1]) + "<br />";
+  //       });
+  //       pointableString += "Tip position: " + vectorToString(pointable.tipPosition) + " mm<br />";
+  //       pointableString += "</div>";
+  //     }
+  //   }
+  // }
+  // else {
+  //   pointableString += "<div>No pointables</div>";
+  // }
+  // pointableOutput.innerHTML = pointableString;
 
   // Display Gesture object data
   var gestureOutput = document.getElementById("gestureData");
@@ -155,17 +161,10 @@ Leap.loop(controllerOptions, function(frame) {
 
       switch (gesture.type) {
         case "circle":
-          // gestureString += "center: " + vectorToString(gesture.center) + " mm, "
-          //               + "normal: " + vectorToString(gesture.normal, 2) + ", "
-          //               + "radius: " + gesture.radius.toFixed(1) + " mm, "
-          //               + "progress: " + gesture.progress.toFixed(2) + " rotations";
-          player.playVideo();
+          //action to do;
           break;
         case "swipe":
-          // gestureString += "start position: " + vectorToString(gesture.startPosition) + " mm, "
-          //               + "current position: " + vectorToString(gesture.position) + " mm, "
-          //               + "direction: " + vectorToString(gesture.direction, 1) + ", "
-          //               + "speed: " + gesture.speed.toFixed(1) + " mm/s";
+          //action todo:
           break;
         case "screenTap":
         case "keyTap":
@@ -212,3 +211,17 @@ function pauseForGestures() {
     pauseOnGesture = false;
   }
 }
+
+
+// function playPauseFunction() {
+//   if (isPlayed) {
+//     player.pauseVideo();
+//     isPlayed = false;
+//     console.log("PAUSE VIDEO");
+//   } 
+//   else {
+//     player.playVideo();
+//     isPlayed = true;
+//     console.log("PLAY VIDEO");
+//   }
+// }

@@ -1,7 +1,6 @@
 var player;
 
 function onYouTubeIframeAPIReady() {
-    console.log("iframe api ready");
     player = new YT.Player('video-placeholder', {
         width: 600,
         height: 400,
