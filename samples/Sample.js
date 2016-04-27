@@ -207,6 +207,15 @@ function vectorToString(vector, digits) {
              + vector[2].toFixed(digits) + ")";
 }
 
+function togglePause() {
+  paused = !paused;
+
+  if (paused) {
+    document.getElementById("pause").innerText = "Resume";
+  } else {
+    document.getElementById("pause").innerText = "Pause";
+  }
+}
 
 function pauseForGestures() {
   if (document.getElementById("pauseOnGesture").checked) {
