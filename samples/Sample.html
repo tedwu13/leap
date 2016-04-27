@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--
+/------------------------------------------------------------------------------\
+| Copyright (C) 2012-2013 Leap Motion, Inc. All rights reserved.               |
+| Leap Motion proprietary and confidential. Not for distribution.              |
+| Use subject to the terms of the Leap Motion SDK Agreement available at       |
+| https://developer.leapmotion.com/sdk_agreement, or another agreement         |
+| between Leap Motion and you, your company or other organization.             |
+\------------------------------------------------------------------------------/
+-->
+
+<!--
+
+See additional libraries, guides, and examples at:
+
+ - https://developer.leapmotion.com/downloads/javascript
+ - https://developer.leapmotion.com/getting-started/javascript
+ - https://developer.leapmotion.com/gallery/tags/javascript
+
+-->
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Leap Motion JavaScript Sample</title>
+<link rel="stylesheet" type="text/css" href="Sample.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+<script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+<script src="Sample.js"></script>
+
+</head>
+<body>
+<h1>Youtube Hand Controller</h1>
+
+<div id="main">
+  <button id="pause" onclick="togglePause()">Pause</button>
+  <input type="checkbox" id="pauseOnGesture" onclick="pauseForGestures()">Pause on gesture</input>
+  <h3>Frame data:</h3>
+  <div id="frameData"></div>
+  <div style="clear:both;"></div>
+  <h3>Hand data:</h3>
+  <div id="handData"></div>
+  <div style="clear:both;"></div>
+  <h3>Finger and tool data:</h3>
+  <div id="pointableData"></div>
+  <div style="clear:both;"></div>
+  <h3>Gesture data:</h3>
+  <div id="gestureData"></div>
+</div>
+
+<div>
+    <div id="video-placeholder"></div>
+        <div id="controls">
+
+        <h2>Play</h2>
+        <i id="play" class="material-icons">play_arrow</i>
+
+        <h2>Pause</h2>
+        <i id="pause" class="material-icons">pause_circle_outline</i>
+
+
+        <h2>Mute / Unmute</h2>
+        <i id="mute-toggle" class="material-icons">volume_up</i>
+
+        <h2>Set volume</h2>
+        <input id="volume-input" type="number" max="100" min="0">
+        
+    </div>
+</div>
+
+<script src="https://js.leapmotion.com/leap-0.6.3.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="Youtube.js"></script>
+
+</body>
+</html>
