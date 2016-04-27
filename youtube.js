@@ -24,9 +24,8 @@ $('#pause').click(function() {
     player.pauseVideo();
 });
 
-$('#mute-toggle').on('click', function() {
-    
-    if(player.isMuted) {
+$('#mute-toggle').click(function() {
+    if(player.isMuted()) {
         player.unMute();
     }
     else {
@@ -35,5 +34,5 @@ $('#mute-toggle').on('click', function() {
 });
 
 $('#volume-input').on('change', function() {
-
+    player.setVolume($(this).val());
 })
