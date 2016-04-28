@@ -5,10 +5,10 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player('video-placeholder', {
         width: 600,
         height: 400,
-        videoId: 'v-A1NyhwoiU',
+        videoId: 'TtgZb0uGUGI',
         playerVars: {
             color: 'white',
-            playlist: 'taJ60kskkns,FG0fTKAqZ5g'
+            playlist: ''
         }
     });
 }
