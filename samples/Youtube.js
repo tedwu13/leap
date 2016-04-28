@@ -5,7 +5,7 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player('video-placeholder', {
         width: 600,
         height: 400,
-        videoId: 'pt2Wd_e-1nQ',
+        videoId: 'v-A1NyhwoiU',
         playerVars: {
             color: 'white',
             playlist: 'taJ60kskkns,FG0fTKAqZ5g'
@@ -40,5 +40,8 @@ $('#volume-input').on('change', function() {
 
 //to do:
 
-//PLAY PREVIOUS VIDEO/NEXT VIDEO
+//Gestures: key tap, extend fingers/fist, move x direction, circle 
+
+//PLAY PREVIOUS VIDEO/NEXT VIDEO (swipe right/swip left )
+//PLAY FASTER/SLOWER (speed)
 
