@@ -36,3 +36,9 @@ $('#mute-toggle').click(function() {
 $('#volume-input').on('change', function() {
     player.setVolume($(this).val());
 })
+
+
+//to do:
+
+//PLAY PREVIOUS VIDEO/NEXT VIDEO
+

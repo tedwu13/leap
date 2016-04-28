@@ -60,10 +60,11 @@ Leap.loop(controllerOptions, function(frame) {
 
       var palmPosition = hand.palmPosition[1];
       position = Math.round(palmPosition / 5.0);
-      console.log(position);
 
       if (position > 100 || position < 0) {
         break;
+        //Revert back to normal volume;
+        player.setVolume(50);
         console.log("Volume is out of bound");
       }
       else {
