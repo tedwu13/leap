@@ -164,24 +164,31 @@ Leap.loop(controllerOptions, function(frame) {
     if (pauseOnGesture) {
       togglePause();
     }
+
     for (var i = 0; i < frame.gestures.length; i++) {
       var gesture = frame.gestures[i];
-      gestureString += "Gesture ID: " + gesture.id + ", "
-                    + "type: " + gesture.type + ", "
-                    + "state: " + gesture.state + ", "
-                    + "hand IDs: " + gesture.handIds.join(", ") + ", "
-                    + "pointable IDs: " + gesture.pointableIds.join(", ") + ", "
-                    + "duration: " + gesture.duration + " &micro;s, ";
+      // gestureString += "Gesture ID: " + gesture.id + ", "
+      //               + "type: " + gesture.type + ", "
+      //               + "state: " + gesture.state + ", "
+      //               + "hand IDs: " + gesture.handIds.join(", ") + ", "
+      //               + "pointable IDs: " + gesture.pointableIds.join(", ") + ", "
+      //               + "duration: " + gesture.duration + " &micro;s, ";
 
       switch (gesture.type) {
         case "circle":
           //action to do;
+          console.log("Circle Gesture");
           break;
         case "swipe":
           //action todo:
+          console.log("Swipe gesture");
+          calculateTimeFrame();
+          player.nextVideo();
           break;
         case "screenTap":
+          console.log("ScreenTap");
         case "keyTap":
+          console.log("Keytap");
           gestureString += "position: " + vectorToString(gesture.position) + " mm";
           break;
         default:
@@ -226,15 +233,16 @@ function pauseForGestures() {
   }
 }
 
-// function playPauseFunction() {
-//   if (isPlayed) {
-//     player.pauseVideo();
-//     isPlayed = false;
-//     console.log("PAUSE VIDEO");
-//   } 
-//   else {
-//     player.playVideo();
-//     isPlayed = true;
-//     console.log("PLAY VIDEO");
-//   }
-// }
+function calculateTimeFrame() {
+  var currentFrame = frame.timestamp;
+  var previousFrame = controller.frame(1).timestamp;
+  var elapsed = currentFrame - previousFrame;
+
+  console.log(elapsed);
+
+
+  // if(gestureType == "swipe") {
+
+  // }
+
+}
