@@ -3,16 +3,21 @@ var previousFrame = null;
 var paused = false;
 var pauseOnGesture = false;
 var isPlayed = false;
+
+var handle;
 // Setup Leap loop with frame callback function
 var controllerOptions = {enableGestures: true};
 
 // to use HMD mode:
 // controllerOptions.optimizeHMD = true;
 
-Leap.loop(controllerOptions, function(frame) {
+var controller = Leap.loop(controllerOptions, function(frame) {
   if (paused) {
     return; // Skip this update
   }
+
+  var currentFrame = frame;
+  var previousFrame = controller.frame(1);
 
   // Display Frame object data
   var frameOutput = document.getElementById("frameData");
@@ -78,6 +83,29 @@ Leap.loop(controllerOptions, function(frame) {
       else if (hand.type == "right") {
         player.playVideo();
       }
+
+      if(handle) {
+        clearTimeout(handle);
+      } else {
+        setTimeout(playNextVideo(hand), 5000);
+      }
+
+      if(hand.grabStrength == 1) {
+        player.mute();
+      }
+      else {
+        player.unMute();
+      }
+      // if(hand.palmPosition[0] < -120) {
+      //     // var timeDiff = currentFrame.timestamp - previousFrame.timestamp;
+
+      //     // var secondDiff = (timeDiff/1000000) % 60;
+      //     // console.log(secondDiff);
+      //     // if(secondDiff > 0.1) {
+      //     //   player.nextVideo();
+      //     // }
+
+      // }        
       // Hand motion factors
       if (previousFrame && previousFrame.valid) {
         var translation = hand.translation(previousFrame);
@@ -182,8 +210,6 @@ Leap.loop(controllerOptions, function(frame) {
         case "swipe":
           //action todo:
           console.log("Swipe gesture");
-          calculateTimeFrame();
-          player.nextVideo();
           break;
         case "screenTap":
           console.log("ScreenTap");
@@ -192,7 +218,7 @@ Leap.loop(controllerOptions, function(frame) {
           gestureString += "position: " + vectorToString(gesture.position) + " mm";
           break;
         default:
-          gestureString += "unkown gesture type";
+          gestureString += "unknown gesture type";
       }
       gestureString += "<br />";
     }
@@ -233,16 +259,11 @@ function pauseForGestures() {
   }
 }
 
-function calculateTimeFrame() {
-  var currentFrame = frame.timestamp;
-  var previousFrame = controller.frame(1).timestamp;
-  var elapsed = currentFrame - previousFrame;
-
-  console.log(elapsed);
-
-
-  // if(gestureType == "swipe") {
-
-  // }
-
+function playNextVideo(hand) {
+  console.log("playing next video");
+  if(hand.palmPosition[0] < -120) {
+      player.nextVideo();
+  }        
 }
+
+
