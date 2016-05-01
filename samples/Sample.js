@@ -2,9 +2,9 @@
 var previousFrame = null;
 var paused = false;
 var pauseOnGesture = false;
-var isPlayed = false;
 
 var handle;
+
 // Setup Leap loop with frame callback function
 var controllerOptions = {enableGestures: true};
 
@@ -63,12 +63,16 @@ var controller = Leap.loop(controllerOptions, function(frame) {
       handString += "Arm center: " + vectorToString(hand.arm.center()) + "<br />";
       handString += "Arm up vector: " + vectorToString(hand.arm.basis[1]) + "<br />";
 
+
+
+      if (typeof(player) === undefined) {
+        alert("Youtube API is undefined");
+      }
       var palmPosition = hand.palmPosition[1];
       position = Math.round(palmPosition / 5.0);
 
       if (position > 100 || position < 0) {
         break;
-        //Revert back to normal volume;
         player.setVolume(50);
         console.log("Volume is out of bound");
       }
@@ -84,11 +88,11 @@ var controller = Leap.loop(controllerOptions, function(frame) {
         player.playVideo();
       }
 
-      if(handle) {
-        clearTimeout(handle);
-      } else {
-        setTimeout(playNextVideo(hand), 5000);
-      }
+      // if(handle) {
+      //   clearTimeout(handle);
+      // } else {
+      //   setTimeout(playNextVideo(hand), 2000);
+      // }
 
       if(hand.grabStrength == 1) {
         player.mute();
@@ -96,16 +100,18 @@ var controller = Leap.loop(controllerOptions, function(frame) {
       else {
         player.unMute();
       }
-      // if(hand.palmPosition[0] < -120) {
-      //     // var timeDiff = currentFrame.timestamp - previousFrame.timestamp;
 
-      //     // var secondDiff = (timeDiff/1000000) % 60;
-      //     // console.log(secondDiff);
-      //     // if(secondDiff > 0.1) {
-      //     //   player.nextVideo();
-      //     // }
+      if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
+        player.setPlaybackRate(2);
+      }
+      else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
+        player.setPlaybackRate(3);
+      }
+      else {
+        player.setPlaybackRate(1);
+      }    
 
-      // }        
+
       // Hand motion factors
       if (previousFrame && previousFrame.valid) {
         var translation = hand.translation(previousFrame);
@@ -195,26 +201,16 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
     for (var i = 0; i < frame.gestures.length; i++) {
       var gesture = frame.gestures[i];
-      // gestureString += "Gesture ID: " + gesture.id + ", "
-      //               + "type: " + gesture.type + ", "
-      //               + "state: " + gesture.state + ", "
-      //               + "hand IDs: " + gesture.handIds.join(", ") + ", "
-      //               + "pointable IDs: " + gesture.pointableIds.join(", ") + ", "
-      //               + "duration: " + gesture.duration + " &micro;s, ";
 
       switch (gesture.type) {
         case "circle":
           //action to do;
-          console.log("Circle Gesture");
           break;
         case "swipe":
           //action todo:
-          console.log("Swipe gesture");
           break;
         case "screenTap":
-          console.log("ScreenTap");
         case "keyTap":
-          console.log("Keytap");
           gestureString += "position: " + vectorToString(gesture.position) + " mm";
           break;
         default:
