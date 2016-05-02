@@ -79,8 +79,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
       if (!handle) {
         handle = true;
-        window.setTimeout(function () {playNextPrevVideo(hand); handle = false;}, 4000);
-        console.log("setting timeout");
+        window.setTimeout(function () {playNextPrevVideo(hand); handle = false;}, 3000);
       }
 
       // if(handle) {
@@ -220,25 +219,6 @@ function vectorToString(vector, digits) {
              + vector[1].toFixed(digits) + ", "
              + vector[2].toFixed(digits) + ")";
 }
-
-function togglePause() {
-  paused = !paused;
-
-  if (paused) {
-    document.getElementById("pause").innerText = "Resume";
-  } else {
-    document.getElementById("pause").innerText = "Pause";
-  }
-}
-
-function pauseForGestures() {
-  if (document.getElementById("pauseOnGesture").checked) {
-    pauseOnGesture = true;
-  } else {
-    pauseOnGesture = false;
-  }
-}
-
 
 function controlVolume(hand) {
   var palmPosition = hand.palmPosition[1];
