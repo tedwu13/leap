@@ -3,7 +3,7 @@ var previousFrame = null;
 var paused = false;
 var pauseOnGesture = false;
 
-var handle;
+var handle = false;
 
 // Setup Leap loop with frame callback function
 var controllerOptions = {enableGestures: true};
@@ -68,6 +68,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
       if (typeof(player) === undefined) {
         alert("Youtube API is undefined");
       }
+
       var palmPosition = hand.palmPosition[1];
       position = Math.round(palmPosition / 5.0);
 
@@ -88,10 +89,22 @@ var controller = Leap.loop(controllerOptions, function(frame) {
         player.playVideo();
       }
 
+      if (!handle) {
+        handle = true;
+        window.setTimeout(function () {playNextPrevVideo(hand); handle = false;}, 4000);
+        console.log("setting timeout");
+      }
+
+
+      //  else {
+      //   window.clearTimeout(handle);
+      //   console.log("clearing timeout");
+      // }
+
       // if(handle) {
-      //   clearTimeout(handle);
+      //   window.clearTimeout(handle);
       // } else {
-      //   setTimeout(playNextVideo(hand), 2000);
+      //   window.setTimeout(playNextVideo(hand), 3000);
       // }
 
       if(hand.grabStrength == 1) {
@@ -204,10 +217,8 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
       switch (gesture.type) {
         case "circle":
-          //action to do;
           break;
         case "swipe":
-          //action todo:
           break;
         case "screenTap":
         case "keyTap":
@@ -255,11 +266,22 @@ function pauseForGestures() {
   }
 }
 
-function playNextVideo(hand) {
-  console.log("playing next video");
-  if(hand.palmPosition[0] < -120) {
-      player.nextVideo();
-  }        
+function playNextPrevVideo(hand) {
+    if(hand.palmPosition[0] < -80) {
+        player.nextVideo();
+    }
+    else if (hand.palmPosition[0] > 80) {
+      player.previousVideo();
+    }
 }
 
+
+// function playFullscreen (){
+//   player.playVideo();//won't work on mobile
+
+//   var requestFullScreen = iframe.requestFullScreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullScreen;
+//   if (requestFullScreen) {
+//     requestFullScreen.bind(iframe)();
+//   }
+// }
 

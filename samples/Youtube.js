@@ -8,7 +8,7 @@ function onYouTubeIframeAPIReady() {
         videoId: '8ATu1BiOPZA',
         playerVars: {
             color: 'white',
-            playlist: 'IyTv_SR2uUo, BdQce4ovifU,CwPdtMWdQIM, kzDyx_dLrhc,G6VLOlCXuwM,Nj-36jra4mQ,cRTIOhmRccE'
+            playlist: 'IyTv_SR2uUo, BdQce4ovifU,CwPdtMWdQIM, kzDyx_dLrhc, Nj-36jra4mQ,cRTIOhmRccE'
         }
     });
 }
@@ -38,10 +38,4 @@ $('#volume-input').on('change', function() {
 })
 
 
-//to do:
-
-//Gestures: key tap, extend fingers/fist, move x direction, circle 
-
-//PLAY PREVIOUS VIDEO/NEXT VIDEO (swipe right/swip left )
-//PLAY FASTER/SLOWER (speed)
 
