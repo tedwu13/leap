@@ -8,12 +8,9 @@ var handle = false;
 // Setup Leap loop with frame callback function
 var controllerOptions = {enableGestures: true};
 
-// to use HMD mode:
-// controllerOptions.optimizeHMD = true;
-
 var controller = Leap.loop(controllerOptions, function(frame) {
   if (paused) {
-    return; // Skip this update
+    return; 
   }
 
   var currentFrame = frame;
@@ -42,7 +39,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
     var scaleFactor = frame.scaleFactor(previousFrame);
     frameString += "Scale factor: " + scaleFactor.toFixed(2) + "<br />";
   }
-  frameOutput.innerHTML = "<div style='width:300px; float:left; padding:5px'>" + frameString + "</div>";
+  // frameOutput.innerHTML = "<div style='width:300px; float:left; padding:5px'>" + frameString + "</div>";
 
   // Display Hand object data
   var handOutput = document.getElementById("handData");
@@ -65,29 +62,20 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
 
 
-      if (typeof(player) === undefined) {
-        alert("Youtube API is undefined");
+      if (typeof(player) === undefined or player.setVolume() === undefined) {
+        console.log("Youtube API is undefined");
       }
 
-      var palmPosition = hand.palmPosition[1];
-      position = Math.round(palmPosition / 5.0);
+      //Control Volume
+      controlVolume(hand);
+      
+      //Pause Video
+      pauseVideo(hand);
 
-      if (position > 100 || position < 0) {
-        break;
-        player.setVolume(50);
-        console.log("Volume is out of bound");
-      }
-      else {
-        player.setVolume(position);
-      }
+      //Play Video
+      playVideo(hand);
 
-
-      if(hand.type == "left") {
-        player.pauseVideo();
-      }
-      else if (hand.type == "right") {
-        player.playVideo();
-      }
+      //Play Next or Previous Video in the Queue
 
       if (!handle) {
         handle = true;
@@ -95,34 +83,19 @@ var controller = Leap.loop(controllerOptions, function(frame) {
         console.log("setting timeout");
       }
 
-
-      //  else {
-      //   window.clearTimeout(handle);
-      //   console.log("clearing timeout");
-      // }
-
       // if(handle) {
       //   window.clearTimeout(handle);
       // } else {
       //   window.setTimeout(playNextVideo(hand), 3000);
       // }
 
-      if(hand.grabStrength == 1) {
-        player.mute();
-      }
-      else {
-        player.unMute();
-      }
+      // mute or unmute video by holding a fist
 
-      if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
-        player.setPlaybackRate(2);
-      }
-      else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
-        player.setPlaybackRate(3);
-      }
-      else {
-        player.setPlaybackRate(1);
-      }    
+      muteVideo();
+
+      // control playback rate from 1~3 using pinching motion 
+
+      controlSpeed();
 
 
       // Hand motion factors
@@ -157,7 +130,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
   else {
     handString += "No hands";
   }
-  handOutput.innerHTML = handString;
+  // handOutput.innerHTML = handString;
 
   // Display Pointable (finger and tool) object data
   var pointableOutput = document.getElementById("pointableData");
@@ -202,7 +175,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
   else {
     pointableString += "<div>No pointables</div>";
   }
-  pointableOutput.innerHTML = pointableString;
+  // pointableOutput.innerHTML = pointableString;
 
   // Display Gesture object data
   var gestureOutput = document.getElementById("gestureData");
@@ -233,7 +206,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
   else {
     gestureString += "No gestures";
   }
-  gestureOutput.innerHTML = gestureString;
+  // gestureOutput.innerHTML = gestureString;
 
   // Store frame for motion functions
   previousFrame = frame;
@@ -266,15 +239,65 @@ function pauseForGestures() {
   }
 }
 
+
+function controlVolume(hand) {
+  var palmPosition = hand.palmPosition[1];
+  position = Math.round(palmPosition / 5.0);
+
+  if (position > 100 || position < 0) {
+    break;
+    player.setVolume(50);
+    console.log("Volume is out of bound");
+  }
+  else {
+    player.setVolume(position);
+  }
+}
+
+
+function pauseVideo(hand) {
+  if(hand.type == "left") {
+    player.pauseVideo();
+  }
+}
+
+function playVideo(hand) {
+  if(hand.type == 'right') {
+    player.playVideo();
+  }
+}
+
 function playNextPrevVideo(hand) {
     if(hand.palmPosition[0] < -80) {
-        player.nextVideo();
+      player.nextVideo();
     }
     else if (hand.palmPosition[0] > 80) {
       player.previousVideo();
     }
 }
 
+function muteVideo(hand) {
+  if(hand.grabStrength == 1) {
+    player.mute();
+  }
+  else {
+    player.unMute();
+  }
+}
+
+function controlSpeed(hand) {
+
+    if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
+      player.setPlaybackRate(2);
+    }
+    else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
+      player.setPlaybackRate(3);
+    }
+    else {
+      player.setPlaybackRate(1);
+    }    
+
+}
 
 // function playFullscreen (){
 //   player.playVideo();//won't work on mobile
