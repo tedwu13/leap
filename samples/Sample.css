@@ -41,12 +41,16 @@ header a{
 
 }
 
+h1 {
+    text-align: center;
+}
+
 #main {
     margin-left: 2%;
     margin-top: 2%;
 }
 #video-placeholder{
-    max-width: 35%;
+    max-width: 60%;
     width: 100%;
     position: fixed;
     top: 130px;
@@ -109,6 +113,10 @@ h2 + pre {
     cursor: pointer;
 }
 
+
+canvas{
+  pointer-events: none;
+}
 
 #controls i {
     color: #000;

@@ -62,18 +62,32 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
 
 
-      if (typeof(player) === undefined or player.setVolume() === undefined) {
+      if (typeof(player) === undefined || player.setVolume() === undefined) {
         console.log("Youtube API is undefined");
       }
 
       //Control Volume
-      controlVolume(hand);
+      // controlVolume(hand);
+      var palmPosition = hand.palmPosition[1];
+      position = Math.round(palmPosition / 5.0);
+
+      if (position > 100 || position < 0) {
+        player.setVolume(50);
+      }
+      else {
+        player.setVolume(position);
+      }
       
       //Pause Video
-      pauseVideo(hand);
-
+      // pauseVideo(hand);
+      if(hand.type == "left") {
+        player.pauseVideo();
+      }
+      
       //Play Video
-      playVideo(hand);
+      if(hand.type == 'right') {
+        player.playVideo();
+      }
 
       //Play Next or Previous Video in the Queue
 
@@ -90,11 +104,24 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
       // mute or unmute video by holding a fist
 
-      muteVideo();
+      if(hand.grabStrength == 1) {
+        player.mute();
+      }
+      else {
+        player.unMute();
+      }
 
       // control playback rate from 1~3 using pinching motion 
 
-      controlSpeed();
+      if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
+        player.setPlaybackRate(2);
+      }
+      else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
+        player.setPlaybackRate(3);
+      }
+      else {
+        player.setPlaybackRate(1);
+      }    
 
 
       // Hand motion factors
@@ -209,7 +236,8 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
   // Store frame for motion functions
   previousFrame = frame;
-})
+});
+
 
 function vectorToString(vector, digits) {
   if (typeof digits === "undefined") {
@@ -218,33 +246,6 @@ function vectorToString(vector, digits) {
   return "(" + vector[0].toFixed(digits) + ", "
              + vector[1].toFixed(digits) + ", "
              + vector[2].toFixed(digits) + ")";
-}
-
-function controlVolume(hand) {
-  var palmPosition = hand.palmPosition[1];
-  position = Math.round(palmPosition / 5.0);
-
-  if (position > 100 || position < 0) {
-    break;
-    player.setVolume(50);
-    console.log("Volume is out of bound");
-  }
-  else {
-    player.setVolume(position);
-  }
-}
-
-
-function pauseVideo(hand) {
-  if(hand.type == "left") {
-    player.pauseVideo();
-  }
-}
-
-function playVideo(hand) {
-  if(hand.type == 'right') {
-    player.playVideo();
-  }
 }
 
 function playNextPrevVideo(hand) {
@@ -256,28 +257,7 @@ function playNextPrevVideo(hand) {
     }
 }
 
-function muteVideo(hand) {
-  if(hand.grabStrength == 1) {
-    player.mute();
-  }
-  else {
-    player.unMute();
-  }
-}
 
-function controlSpeed(hand) {
-
-    if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
-      player.setPlaybackRate(2);
-    }
-    else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
-      player.setPlaybackRate(3);
-    }
-    else {
-      player.setPlaybackRate(1);
-    }    
-
-}
 
 // function playFullscreen (){
 //   player.playVideo();//won't work on mobile
