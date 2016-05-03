@@ -82,46 +82,44 @@ var controller = Leap.loop(controllerOptions, function(frame) {
       // pauseVideo(hand);
       if(hand.type == "left") {
         player.pauseVideo();
+        player.mute()
       }
-      
+
       //Play Video
       if(hand.type == 'right') {
         player.playVideo();
+
+        // var elem = document.getElementById("video-placeholder");
+        // if (elem.requestFullscreen) {
+        //   elem.requestFullscreen();
+        // } else if (elem.msRequestFullscreen) {
+        //   elem.msRequestFullscreen();
+        // } else if (elem.mozRequestFullScreen) {
+        //   elem.mozRequestFullScreen();
+        // } else if (elem.webkitRequestFullscreen) {
+        //   elem.webkitRequestFullscreen();
+        // }
+    
+        player.unMute();
+
+        // control playback rate from 1~3 using pinching motion 
+        if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
+          player.setPlaybackRate(2);
+        }
+        else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
+          player.setPlaybackRate(3);
+        }
+        else {
+          player.setPlaybackRate(1);
+        }
+
+        if (!handle) {
+          handle = true;
+          window.setTimeout(function () {playNextVideo(hand); handle = false;}, 2000);
+        }    
       }
 
       //Play Next or Previous Video in the Queue
-
-      if (!handle) {
-        handle = true;
-        window.setTimeout(function () {playNextPrevVideo(hand); handle = false;}, 3000);
-      }
-
-      // if(handle) {
-      //   window.clearTimeout(handle);
-      // } else {
-      //   window.setTimeout(playNextVideo(hand), 3000);
-      // }
-
-      // mute or unmute video by holding a fist
-
-      if(hand.grabStrength == 1) {
-        player.mute();
-      }
-      else {
-        player.unMute();
-      }
-
-      // control playback rate from 1~3 using pinching motion 
-
-      if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
-        player.setPlaybackRate(2);
-      }
-      else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
-        player.setPlaybackRate(3);
-      }
-      else {
-        player.setPlaybackRate(1);
-      }    
 
 
       // Hand motion factors
@@ -248,23 +246,23 @@ function vectorToString(vector, digits) {
              + vector[2].toFixed(digits) + ")";
 }
 
-function playNextPrevVideo(hand) {
-    if(hand.palmPosition[0] < -80) {
+function playNextVideo(hand) {
+    // if(hand.palmPosition[0] < -100) {
+    //   player.nextVideo();
+    // }
+    // else if (hand.palmPosition[0] > 100) {
+    //   player.previousVideo();
+    // }
+    if(hand.grabStrength == 1) {
       player.nextVideo();
-    }
-    else if (hand.palmPosition[0] > 80) {
-      player.previousVideo();
     }
 }
 
 
 
-// function playFullscreen (){
-//   player.playVideo();//won't work on mobile
+function playFullscreen (){
+  player.playVideo();//won't work on mobile
 
-//   var requestFullScreen = iframe.requestFullScreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullScreen;
-//   if (requestFullScreen) {
-//     requestFullScreen.bind(iframe)();
-//   }
-// }
+  
+}
 
