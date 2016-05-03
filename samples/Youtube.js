@@ -7,7 +7,7 @@ function onYouTubeIframeAPIReady() {
         videoId: '8ATu1BiOPZA',
         playerVars: {
             color: 'white',
-            playlist: 'IyTv_SR2uUo, BdQce4ovifU, CwPdtMWdQIM, kzDyx_dLrhc, Nj-36jra4mQ,cRTIOhmRccE'
+            playlist: 'IyTv_SR2uUo'
         }
     });
 }
