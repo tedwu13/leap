@@ -43,6 +43,7 @@ h1 {
     font-weight: 300;
     margin-top: 10px;
     font-size: 2.5em;
+    display: inline-block;
 }
 
 #main {
@@ -56,81 +57,21 @@ h1 {
     margin: 0 auto;
 }
 
-#controls{
-    margin-right: 40%;
-    margin-left: 20%;
-    margin-top: 10%;
+#logo {
+    display: inline-block;
+    margin-top:10px;
+    width: 150px;
+    height: 50px;
 }
-
-#controls ul{
-    list-style: none;
-}
-
-#controls pre{
-    border: 6px solid #E7E9F3;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-}
-
-#controls ul li {
-    margin: 40px;
-}
-
-#controls ul li code{
-    padding: 24px;
-    line-height: 1.45;
-    font-size: 13px;
-}
-
-
-h2{
-    display: block;
-    margin-bottom: 24px;
-    font-size: 26px;
-    color: #43495F;
-}
-
-h2 ~ * {
-    margin-bottom: 24px;
-}
-
-h2 + pre {
-    margin-top: 36px;
-}
-
-.thumbnail{
-    cursor: pointer;
-    margin: 0 10px 20px 0;
-    border: 6px solid #fff;
-    box-shadow: 0 1px 1px #ccc;
-    width: 200px;
-}
-
-#progress-bar{
-    position: relative;
-    width: 100%;
-    height: 20px;
-    cursor: pointer;
-}
-
-
-canvas{
-  pointer-events: none;
-}
-
-#controls i {
-    color: #000;
-    font-size: 32px;
-    cursor: pointer;
-}
-
 #volume-input{
     height: 32px;
     width: 45px;
 }
 
-#next,
-#prev{
+.header{
     display: block;
+    margin: 0 auto;
+    width: 550px;
 }
 
 
