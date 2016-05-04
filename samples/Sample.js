@@ -99,10 +99,10 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
         // control playback rate from 1~3 using pinching motion 
         if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
-          player.setPlaybackRate(2);
+          player.setPlaybackRate(1.5);
         }
         else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
-          player.setPlaybackRate(3);
+          player.setPlaybackRate(2);
         }
         else {
           player.setPlaybackRate(1);
