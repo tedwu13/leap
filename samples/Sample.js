@@ -4,6 +4,8 @@ var paused = false;
 var pauseOnGesture = false;
 
 var handle = false;
+var leftSwipeReady = true;
+var rightSwipeReady = true;
 
 // Setup Leap loop with frame callback function
 var controllerOptions = {enableGestures: true};
@@ -13,33 +15,13 @@ var controller = Leap.loop(controllerOptions, function(frame) {
     return; 
   }
 
+  var hand1 = frame.hands[0];
+  var hand2 = frame.hands[1];
+  if (!hand1 && !hand2) return;
+
   var currentFrame = frame;
   var previousFrame = controller.frame(1);
 
-  // Display Frame object data
-  var frameOutput = document.getElementById("frameData");
-
-  var frameString = "Frame ID: " + frame.id  + "<br />"
-                  + "Timestamp: " + frame.timestamp + " &micro;s<br />"
-                  + "Hands: " + frame.hands.length + "<br />"
-                  + "Fingers: " + frame.fingers.length + "<br />"
-                  + "Tools: " + frame.tools.length + "<br />"
-                  + "Gestures: " + frame.gestures.length + "<br />";
-
-  // Frame motion factors
-  if (previousFrame && previousFrame.valid) {
-    var translation = frame.translation(previousFrame);
-    frameString += "Translation: " + vectorToString(translation) + " mm <br />";
-
-    var rotationAxis = frame.rotationAxis(previousFrame);
-    var rotationAngle = frame.rotationAngle(previousFrame);
-    frameString += "Rotation axis: " + vectorToString(rotationAxis, 2) + "<br />";
-    frameString += "Rotation angle: " + rotationAngle.toFixed(2) + " radians<br />";
-
-    var scaleFactor = frame.scaleFactor(previousFrame);
-    frameString += "Scale factor: " + scaleFactor.toFixed(2) + "<br />";
-  }
-  // frameOutput.innerHTML = "<div style='width:300px; float:left; padding:5px'>" + frameString + "</div>";
 
   // Display Hand object data
   var handOutput = document.getElementById("handData");
@@ -67,7 +49,6 @@ var controller = Leap.loop(controllerOptions, function(frame) {
       }
 
       //Control Volume
-      // controlVolume(hand);
       var palmPosition = hand.palmPosition[1];
       position = Math.round(palmPosition / 5.0);
 
@@ -79,23 +60,43 @@ var controller = Leap.loop(controllerOptions, function(frame) {
       }
       
       //Pause Video
-      // pauseVideo(hand);
       if(hand.type == "left") {
         player.pauseVideo();
         player.mute();
 
-        if (!handle) {
-          handle = true;
-          window.setTimeout(function () {playPreviousVideo(hand); handle = false;}, 2000);
-        }    
+        // if (!handle) {
+        //   handle = true;
+        //   window.setTimeout(function () {playPreviousVideo(hand); handle = false;}, 2000);
+        // }    
       }
 
       //Play Video
       if(hand.type == 'right') {
         player.playVideo();
 
-    
         player.unMute();
+
+        var v1x = hand1.palmVelocity[0];
+        var v1y = hand1.palmVelocity[1];
+        var x1 = hand1.palmPosition[0];
+        var y1 = hand1.palmPosition[1];
+
+
+        if(v1x < -1000 && leftSwipeReady) {
+          playPreviousVideo();
+          leftSwipeReady = false;
+        } 
+        else if (v1x > 0) {
+          leftSwipeReady = true;
+        }
+
+        if(v1x > 1000 && rightSwipeReady) {
+          playNextVideo();
+          rightSwipeReady = false;
+        }
+        else if (v1x < 0) {
+          rightSwipeReady = true;
+        }
 
         // control playback rate from 1~3 using pinching motion 
         if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
@@ -108,10 +109,12 @@ var controller = Leap.loop(controllerOptions, function(frame) {
           player.setPlaybackRate(1);
         }
 
-        if (!handle) {
-          handle = true;
-          window.setTimeout(function () {playNextVideo(hand); handle = false;}, 2000);
-        }    
+        // if (!handle) {
+        //   handle = true;
+        //   window.setTimeout(function () {playNextVideo(hand); handle = false;}, 2000);
+        // }
+
+
       }
 
       //Play Next or Previous Video in the Queue
@@ -242,22 +245,10 @@ function vectorToString(vector, digits) {
 }
 
 function playNextVideo(hand) {
-    // if(hand.palmPosition[0] < -100) {
-    //   player.nextVideo();
-    // }
-    // else if (hand.palmPosition[0] > 100) {
-    //   player.previousVideo();
-    // }
-    console.log("playing next video");
-    if(hand.grabStrength == 1) {
-      player.nextVideo();
-    }
+    player.nextVideo();
 }
 function playPreviousVideo(hand) {
-    console.log("playing previous video");
-    if(hand.grabStrength == 1) {
-      player.previousVideo();
-    }
+    player.previousVideo();
 }
 
 
