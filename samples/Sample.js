@@ -146,13 +146,15 @@ visualizeHand = function(controller){
     handMesh.material.opacity = 0.8;
   });
 
-  var overlay = controller.plugins.playback.player.overlay;
-  overlay.style.right = 0;
-  overlay.style.left = 'auto';
-  overlay.style.top = 'auto';
-  overlay.style.padding = 0;
-  overlay.style.bottom = '13px';
-  overlay.style.width = '180px';
+  console.log(controller);
+  
+  // var overlay = controller.plugins.playback.player.overlay;
+  // overlay.style.right = 0;
+  // overlay.style.left = 'auto';
+  // overlay.style.top = 'auto';
+  // overlay.style.padding = 0;
+  // overlay.style.bottom = '13px';
+  // overlay.style.width = '180px';
 
 
   controller.use('riggedHand', {
@@ -172,4 +174,5 @@ visualizeHand = function(controller){
   camera.position.set(0,20,-25);
   camera.lookAt(new THREE.Vector3(0,3,0));
 };
+
 visualizeHand(Leap.loopController);
