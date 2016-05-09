@@ -138,7 +138,8 @@ function playPreviousVideo(hand) {
     player.previousVideo();
 }
 
-// Adds the rigged hand plugin to the controller
+
+// // Adds the rigged hand plugin to the controller
 visualizeHand = function(controller){
 
   controller.use('playback').on('riggedHand.meshAdded', function(handMesh, leapHand){
@@ -167,3 +168,8 @@ visualizeHand = function(controller){
     }
   });
 
+  var camera = controller.plugins.riggedHand.camera;
+  camera.position.set(0,20,-25);
+  camera.lookAt(new THREE.Vector3(0,3,0));
+};
+visualizeHand(Leap.loopController);
