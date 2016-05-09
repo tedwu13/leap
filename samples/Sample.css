@@ -14,28 +14,6 @@ body{
 
 }
 
-header{
-    box-sizing: border-box;
-    text-align: center;
-    width: 100%;
-    padding: 25px 40px;
-    background-color: #3A56B7;
-    overflow: hidden;
-}
-
-
-header a{
-    color:#fff;
-    float: right;
-    text-decoration: none;
-    display: inline-block;
-    padding: 13px 50px;
-    border-radius: 3px;
-    font: bold 14px/1 'Open Sans', sans-serif;
-    text-transform: uppercase;
-    background-color:#F05283;
-
-}
 
 h1 {
     text-align: center;
@@ -59,13 +37,9 @@ h1 {
 
 #logo {
     display: inline-block;
-    margin-top:10px;
+    margin: 0 auto;
     width: 150px;
     height: 50px;
-}
-#volume-input{
-    height: 32px;
-    width: 45px;
 }
 
 .header{
@@ -75,30 +49,10 @@ h1 {
 }
 
 
-@media (max-width: 1000px) {
-
-
-    header h1{
-        float: none;
-    }
-
-    header a{
-        margin-top: 25px;
-        float: none;
-    }
-
-}
-
 @media (max-width: 1200px) {
 
     #video-placeholder{
         max-width: 100%;
         position: static;
     }
-
-    #controls{
-        margin-right: 0;
-    }
-
-    #bsaHolder{ display:none;}
 }

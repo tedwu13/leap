@@ -146,15 +146,15 @@ visualizeHand = function(controller){
     handMesh.material.opacity = 0.8;
   });
 
-  console.log(controller);
-  
-  // var overlay = controller.plugins.playback.player.overlay;
-  // overlay.style.right = 0;
-  // overlay.style.left = 'auto';
-  // overlay.style.top = 'auto';
-  // overlay.style.padding = 0;
-  // overlay.style.bottom = '13px';
-  // overlay.style.width = '180px';
+  console.log(controller.plugins);
+
+  var overlay = controller.plugins.playback.player.overlay;
+  overlay.style.right = 0;
+  overlay.style.left = 'auto';
+  overlay.style.top = 'auto';
+  overlay.style.padding = 0;
+  overlay.style.bottom = '13px';
+  overlay.style.width = '10px';
 
 
   controller.use('riggedHand', {
