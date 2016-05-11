@@ -27,18 +27,8 @@ var controller = Leap.loop(controllerOptions, function(frame) {
         var hand = frame.hands[i];
 
         //Control Volume
-        var palmPosition = hand.palmPosition[1];
-        position = Math.round(palmPosition / 5.0);
-
-        if (position > 100 || position < 0) {
-            player.setVolume(50);
-            moveBar(50);
-        }
-        else {
-            player.setVolume(position);
-            moveBar(position);
-        }
-
+        controlVolume(hand);
+        
         //Pause Video
         if(hand.type == "left") {
             player.pauseVideo();
@@ -53,39 +43,25 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
             var v1x = hand1.palmVelocity[0];
 
-        if(v1x < -1000 && leftSwipeReady) {
-          playPreviousVideo();
-          leftSwipeReady = false;
-          document.getElementById("commands").innerHTML = "PREVIOUS VIDEO";
-        } 
-        else if (v1x > 0) {
-          leftSwipeReady = true;
-        }
+            if(v1x < -1000 && leftSwipeReady) {
+                playPreviousVideo();
+                leftSwipeReady = false;
+                document.getElementById("commands").innerHTML = "PREVIOUS VIDEO";
+            } else if (v1x > 0) {
+                leftSwipeReady = true;
+            }
 
-        if(v1x > 1000 && rightSwipeReady) {
-          playNextVideo();
-          rightSwipeReady = false;
-          document.getElementById("commands").innerHTML = "NEXT VIDEO";
+            if(v1x > 1000 && rightSwipeReady) {
+                playNextVideo();
+                rightSwipeReady = false;
+                document.getElementById("commands").innerHTML = "NEXT VIDEO";
+            } else if (v1x < 0) {
+                rightSwipeReady = true;
+            }
 
-        }
-        else if (v1x < 0) {
-          rightSwipeReady = true;
-        }
 
-        // control playback rate from 1~3 using pinching motion 
-        if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
-          player.setPlaybackRate(1.5);
-          document.getElementById("speed").innerHTML = "1.5";
-
-        }
-        else if (hand.pinchStrength > 0.8 && hand.pinchStrength < 1.01) {
-          player.setPlaybackRate(2);
-          document.getElementById("speed").innerHTML = "2";
-        }
-        else {
-          player.setPlaybackRate(1);
-          document.getElementById("speed").innerHTML = "1";
-        }
+            // Fast forward/control speed
+            setPlaybackSpeed(hand);
 
       }
 
@@ -102,29 +78,8 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
     for (var i = 0; i < frame.gestures.length; i++) {
       var gesture = frame.gestures[i];
-      // var state = gesture.state;
-      // var circleProgress = gesture.progress;
-      // var completeCircles = Math.floor(circleProgress);
-
       switch (gesture.type) {
         case "circle":
-          // // check direction
-          // var clockwise = false;
-          // var pointableID = gesture.pointableIds[0];
-          // var direction = frame.pointable(pointableID).direction;
-          // var dotProduct = Leap.vec3.dot(direction, gesture.normal);
-          // if (dotProduct  >  0) clockwise = true;
-
-          // if (completeCircles >= 1 && state=="update"){
-          //   if (clockwise){
-          //     fasterSpeed();
-          //     console.log("faster");
-          //   }
-          //   if (!clockwise){
-          //     slowerSpeed();
-          //     console.log("slower");
-          //   }
-          // }
             break;
         case "swipe":
           break;
@@ -141,18 +96,31 @@ var controller = Leap.loop(controllerOptions, function(frame) {
   else {
     gestureString += "No gestures";
   }
-  // gestureOutput.innerHTML = gestureString;
-
   // Store frame for motion functions
   previousFrame = frame;
 });
 
 
+function controlVolume(hand) {
+    //Control Volume
+    var palmPosition = hand.palmPosition[1];
+    position = Math.round(palmPosition / 5.0);
+
+    if (position > 100 || position < 0) {
+        player.setVolume(50);
+        moveBar(50);
+    }
+    else {
+        player.setVolume(position);
+        moveBar(position);
+    }
+}
+
 function vectorToString(vector, digits) {
-  if (typeof digits === "undefined") {
-    digits = 1;
-  }
-  return "(" + vector[0].toFixed(digits) + ", "
+    if (typeof digits === "undefined") {
+        digits = 1;
+    }
+    return "(" + vector[0].toFixed(digits) + ", "
              + vector[1].toFixed(digits) + ", "
              + vector[2].toFixed(digits) + ")";
 }
@@ -188,8 +156,22 @@ function moveBar(position) {
         elem.style.width = position + '%'; 
         document.getElementById('label').innerHTML = position * 1;
     }
+}
 
+function setPlaybackSpeed(hand) {
+    if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
+        player.setPlaybackRate(1.5);
+        document.getElementById("speed").innerHTML = "1.5";
 
+    }
+    else if (hand.pinchStrength > 0.8 && hand.pinchStrength < 1.01) {
+        player.setPlaybackRate(2);
+        document.getElementById("speed").innerHTML = "2";
+    }
+    else {
+        player.setPlaybackRate(1);
+        document.getElementById("speed").innerHTML = "1";
+    }
 }
 // // Adds the rigged hand plugin to the controller
 visualizeHand = function(controller){
@@ -229,8 +211,6 @@ visualizeHand = function(controller){
   });
 
   var camera = controller.plugins.riggedHand.camera;
-  // camera.position.set(0,10,-25);
-  // camera.lookAt(new THREE.Vector3(0,3,0));
   camera.position.set(0,10,-25);
   camera.lookAt(new THREE.Vector3(0,3,0));
 };
