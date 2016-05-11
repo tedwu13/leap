@@ -38,17 +38,19 @@ var controller = Leap.loop(controllerOptions, function(frame) {
         player.setVolume(position);
         moveBar(position);
       }
-      
+
+
       //Pause Video
       if(hand.type == "left") {
         player.pauseVideo();
         player.mute();
+        document.getElementById("commands").innerHTML = "PAUSE VIDEO";
+
       }
 
       //Play Video
       if(hand.type == 'right') {
         player.playVideo();
-
         player.unMute();
 
         var v1x = hand1.palmVelocity[0];
@@ -56,6 +58,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
         if(v1x < -1000 && leftSwipeReady) {
           playPreviousVideo();
           leftSwipeReady = false;
+          document.getElementById("commands").innerHTML = "PREVIOUS VIDEO";
         } 
         else if (v1x > 0) {
           leftSwipeReady = true;
@@ -64,6 +67,8 @@ var controller = Leap.loop(controllerOptions, function(frame) {
         if(v1x > 1000 && rightSwipeReady) {
           playNextVideo();
           rightSwipeReady = false;
+          document.getElementById("commands").innerHTML = "NEXT VIDEO";
+
         }
         else if (v1x < 0) {
           rightSwipeReady = true;
@@ -110,12 +115,16 @@ var controller = Leap.loop(controllerOptions, function(frame) {
         // // control playback rate from 1~3 using pinching motion 
         if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
           player.setPlaybackRate(1.5);
+          document.getElementById("speed").innerHTML = "1.5";
+
         }
-        else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
+        else if (hand.pinchStrength > 0.8 && hand.pinchStrength < 1.01) {
           player.setPlaybackRate(2);
+          document.getElementById("speed").innerHTML = "2";
         }
         else {
           player.setPlaybackRate(1);
+          document.getElementById("speed").innerHTML = "1";
         }
 
       }
@@ -217,7 +226,10 @@ function moveBar(position) {
         elem.style.width = '50%';
     } else {
         elem.style.width = position + '%'; 
+        document.getElementById('label').innerHTML = position * 1;
     }
+
+
 }
 // // Adds the rigged hand plugin to the controller
 visualizeHand = function(controller){
