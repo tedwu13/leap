@@ -3,7 +3,6 @@ var previousFrame = null;
 var paused = false;
 var pauseOnGesture = false;
 
-var handle = false;
 var leftSwipeReady = true;
 var rightSwipeReady = true;
 
@@ -69,22 +68,21 @@ var controller = Leap.loop(controllerOptions, function(frame) {
           rightSwipeReady = true;
         }
 
-        // control playback rate from 1~3 using pinching motion 
-        if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
-          player.setPlaybackRate(1.5);
-        }
-        else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
-          player.setPlaybackRate(2);
-        }
-        else {
-          player.setPlaybackRate(1);
-        }
+        // // control playback rate from 1~3 using pinching motion 
+        // if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
+        //   player.setPlaybackRate(1.5);
+        // }
+        // else if (hand.pinchStrength > 0.61 && hand.pinchStrength < 1.01) {
+        //   player.setPlaybackRate(2);
+        // }
+        // else {
+        //   player.setPlaybackRate(1);
+        // }
 
       }
 
     }
   }
-
 
   // Display Gesture object data
   var gestureOutput = document.getElementById("gestureData");
@@ -97,9 +95,31 @@ var controller = Leap.loop(controllerOptions, function(frame) {
     for (var i = 0; i < frame.gestures.length; i++) {
       var gesture = frame.gestures[i];
 
+      console.log(gesture);
+      var state = gesture.state;
+      var circleProgress = gesture.progress;
+      var completeCircles = Math.floor(circleProgress);
+
       switch (gesture.type) {
         case "circle":
-          break;
+          // check direction
+          var clockwise = false;
+          var pointableID = gesture.pointableIds[0];
+          var direction = frame.pointable(pointableID).direction;
+          var dotProduct = Leap.vec3.dot(direction, gesture.normal);
+          if (dotProduct  >  0) clockwise = true;
+
+          if (completeCircles >= 1 && state=="update"){
+            if (clockwise){
+              fasterSpeed();
+              console.log("faster");
+            }
+            if (!clockwise){
+              slowerSpeed();
+              console.log("slower");
+            }
+          }
+            break;
         case "swipe":
           break;
         case "screenTap":
@@ -138,7 +158,28 @@ function playPreviousVideo(hand) {
     player.previousVideo();
 }
 
+function fasterSpeed() {
+    var currentRate = player.getPlaybackRate();
+    currentRate += 0.5;
+    console.log("faster", currentRate);
+    if(currentRate <= 2) {
+      player.setPlaybackRate(currentRate);
+    }
+    else {
+      player.setPlaybackRate(2);
+    }
+}
 
+function slowerSpeed() {
+    var currentRate = player.getPlaybackRate();
+    currentRate -= 0.5;
+    console.log("slower", currentRate);
+    if(currentRate >= 1)
+    player.setPlaybackRate(currentRate); 
+    else {
+      player.setPlaybackRate(1);
+    }
+}
 // // Adds the rigged hand plugin to the controller
 visualizeHand = function(controller){
 
@@ -171,7 +212,7 @@ visualizeHand = function(controller){
   });
 
   var camera = controller.plugins.riggedHand.camera;
-  camera.position.set(0,20,-25);
+  camera.position.set(0,10,-25);
   camera.lookAt(new THREE.Vector3(0,3,0));
 };
 
