@@ -24,36 +24,34 @@ var controller = Leap.loop(controllerOptions, function(frame) {
 
   if (frame.hands.length > 0) {
     for (var i = 0; i < frame.hands.length; i++) {
-      var hand = frame.hands[i];
+        var hand = frame.hands[i];
 
-      //Control Volume
-      var palmPosition = hand.palmPosition[1];
-      position = Math.round(palmPosition / 5.0);
+        //Control Volume
+        var palmPosition = hand.palmPosition[1];
+        position = Math.round(palmPosition / 5.0);
 
-      if (position > 100 || position < 0) {
-        player.setVolume(50);
-        moveBar(50);
-      }
-      else {
-        player.setVolume(position);
-        moveBar(position);
-      }
+        if (position > 100 || position < 0) {
+            player.setVolume(50);
+            moveBar(50);
+        }
+        else {
+            player.setVolume(position);
+            moveBar(position);
+        }
 
+        //Pause Video
+        if(hand.type == "left") {
+            player.pauseVideo();
+            player.mute();
+            document.getElementById("commands").innerHTML = "PAUSE VIDEO";
+        }
 
-      //Pause Video
-      if(hand.type == "left") {
-        player.pauseVideo();
-        player.mute();
-        document.getElementById("commands").innerHTML = "PAUSE VIDEO";
+        //Play Video
+        if(hand.type == 'right') {
+            player.playVideo();
+            player.unMute();
 
-      }
-
-      //Play Video
-      if(hand.type == 'right') {
-        player.playVideo();
-        player.unMute();
-
-        var v1x = hand1.palmVelocity[0];
+            var v1x = hand1.palmVelocity[0];
 
         if(v1x < -1000 && leftSwipeReady) {
           playPreviousVideo();
@@ -74,45 +72,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
           rightSwipeReady = true;
         }
 
-        // console.log(hand.palmNormal[]);
-
-        // var palm_x = hand1.palmNormal[0];
-
-        // console.log(palm_x);
-        // console.log(player.getPlaybackRate());
-
-        // if(palm_x > 0) {
-        //   player.setPlaybackRate(2);
-        // } 
-        // else if (palm_x < -0.65 && palm_x > -0.99) {
-        //   player.setPlaybackRate(0.5) 
-        // }
-        // else {
-        //   player.setPlaybackRate(1);
-        // }
-
-        // if(hand.pinchStrength >= 0.9){
-        //     console.log(hand.pinchStrength);
-        //     var pinchingFinger = findPinchingFinger(hand);
-        //     switch(pinchingFinger.type) {
-        //       case 1:
-        //         console.log("index finger");
-        //         player.setPlaybackRate(0.5);
-        //         break;
-        //       case 2:
-        //         console.log("middle");
-        //         player.setPlaybackRate(1);
-        //         break;
-        //       case 3:
-        //         console.log("ring");
-        //         player.setPlaybackRate(2);
-        //         break;
-        //       case 4:
-        //         break;
-
-        //     }
-        // }
-        // // control playback rate from 1~3 using pinching motion 
+        // control playback rate from 1~3 using pinching motion 
         if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
           player.setPlaybackRate(1.5);
           document.getElementById("speed").innerHTML = "1.5";
@@ -258,8 +218,6 @@ visualizeHand = function(controller){
                     lightness: 0.5
                   }
         }
-
-
         return {
           hue: 0.55,
           saturation: leapHand.grabStrength,

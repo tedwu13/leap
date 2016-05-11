@@ -41,7 +41,7 @@ h4 {
     margin-top: 2%;
 }
 #video-placeholder{
-    max-width: 35%;
+    max-width: 40%;
     width: 100%;
     position: fixed;
     top: 100px;
@@ -81,8 +81,8 @@ h4 {
 }
 
 #label {
-    text-align: center; /* If you want to center it */
-    line-height: 30px; /* Set the line-height to the same as the height of the progress bar container, to center it vertically */
+    text-align: center; 
+    line-height: 30px; 
     color: white;
 }
 
