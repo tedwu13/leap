@@ -7,7 +7,7 @@ Instructions
 When you first get your LEAP motion device, unpackage it and perform the following steps:
 ![alt text](http://main.makeuseoflimited.netdna-cdn.com/wp-content/uploads/2013/07/Leap-Motion-Splash-Screen.png)
 
-2. Git Clone the Repo: https://github.com/whoedward/leap 
+2. Git Clone the Repo: https://github.com/tedwu13/leap 
 
 3. Start hacking! 
 
