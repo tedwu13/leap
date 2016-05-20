@@ -41,6 +41,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
             player.playVideo();
             player.unMute();
 
+
             var v1x = hand1.palmVelocity[0];
 
             if(v1x < -1000 && leftSwipeReady) {
@@ -85,7 +86,6 @@ var controller = Leap.loop(controllerOptions, function(frame) {
           break;
         case "screenTap":
         case "keyTap":
-          gestureString += "position: " + vectorToString(gesture.position) + " mm";
           break;
         default:
           gestureString += "unknown gesture type";
@@ -114,15 +114,6 @@ function controlVolume(hand) {
         player.setVolume(position);
         moveBar(position);
     }
-}
-
-function vectorToString(vector, digits) {
-    if (typeof digits === "undefined") {
-        digits = 1;
-    }
-    return "(" + vector[0].toFixed(digits) + ", "
-             + vector[1].toFixed(digits) + ", "
-             + vector[2].toFixed(digits) + ")";
 }
 
 function playNextVideo(hand) {
