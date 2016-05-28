@@ -1,15 +1,17 @@
 var player;
 
 function onYouTubeIframeAPIReady() {
+    console.log("checking youtube iframe");
     player = new YT.Player('video-placeholder', {
         width: 600,
         height: 400,
         videoId: '8ATu1BiOPZA',
         playerVars: {
             color: 'white',
-            playlist: 'IyTv_SR2uUo, Y92ElR6krmY, wJF5NXygL4k, Dd7FixvoKBw'
+            playlist: 'juAnFFcMw3I, IyTv_SR2uUo, 0dtkfpTwDxU, oOT2-OTebx0'
         }
     });
+    console.log(player);
 }
 
 

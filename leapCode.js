@@ -69,6 +69,7 @@ var controller = Leap.loop(controllerOptions, function(frame) {
     }
   }
 
+
   // Display Gesture object data
   var gestureOutput = document.getElementById("gestureData");
   var gestureString = "";
@@ -150,14 +151,10 @@ function moveBar(position) {
 }
 
 function setPlaybackSpeed(hand) {
-    if(hand.pinchStrength > 0.3 && hand.pinchStrength < 0.6) {
+    if(hand.pinchStrength > 0.5) {
         player.setPlaybackRate(1.5);
         document.getElementById("speed").innerHTML = "1.5";
 
-    }
-    else if (hand.pinchStrength > 0.8 && hand.pinchStrength < 1.01) {
-        player.setPlaybackRate(2);
-        document.getElementById("speed").innerHTML = "2";
     }
     else {
         player.setPlaybackRate(1);
